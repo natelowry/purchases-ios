@@ -364,13 +364,16 @@ public typealias StartPurchaseBlock = (@escaping PurchaseCompletedBlock) -> Void
             }
         }()
 
-        let trialOrIntroPriceChecker = TrialOrIntroPriceEligibilityChecker(systemInfo: systemInfo,
-                                                                           receiptFetcher: receiptFetcher,
-                                                                           introEligibilityCalculator: introCalculator,
-                                                                           backend: backend,
-                                                                           currentUserProvider: identityManager,
-                                                                           operationDispatcher: operationDispatcher,
-                                                                           productsManager: productsManager)
+        let trialOrIntroPriceChecker = CachingTrialOrIntroPriceEligibilityChecker(
+            checker: TrialOrIntroPriceEligibilityChecker(systemInfo: systemInfo,
+                                                         receiptFetcher: receiptFetcher,
+                                                         introEligibilityCalculator: introCalculator,
+                                                         backend: backend,
+                                                         currentUserProvider: identityManager,
+                                                         operationDispatcher: operationDispatcher,
+                                                         productsManager: productsManager)
+        )
+
         self.init(appUserID: appUserID,
                   requestFetcher: fetcher,
                   receiptFetcher: receiptFetcher,
