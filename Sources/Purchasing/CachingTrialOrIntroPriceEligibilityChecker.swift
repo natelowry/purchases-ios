@@ -19,10 +19,27 @@ import Foundation
 final class CachingTrialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityCheckerType {
 
     private let checker: TrialOrIntroPriceEligibilityCheckerType
+    private let notificationCenter: NotificationCenter
+
     private let cache: Atomic<[String: IntroEligibility]> = .init([:])
 
-    init(checker: TrialOrIntroPriceEligibilityCheckerType) {
+    // This is an IUO because it needs to be late-initialized after the observation, since it uses `self`.
+    private var observation: NSObjectProtocol!
+
+    init(checker: TrialOrIntroPriceEligibilityCheckerType, notificationCenter: NotificationCenter) {
         self.checker = checker
+        self.notificationCenter = notificationCenter
+
+        self.observation = notificationCenter.addObserver(
+            forName: CustomerInfoManager.customerInfoChangedNotification,
+            object: nil,
+            queue: nil,
+            using: { [weak self] _ in self?.clearCache() }
+        )
+    }
+
+    deinit {
+        self.notificationCenter.removeObserver(self.observation!)
     }
 
 }
@@ -68,6 +85,14 @@ extension CachingTrialOrIntroPriceEligibilityChecker {
 }
 
 // MARK: - Private
+
+private extension CachingTrialOrIntroPriceEligibilityChecker {
+
+    func clearCache() {
+        self.cache.value.removeAll(keepingCapacity: false)
+    }
+
+}
 
 private extension IntroEligibility {
 

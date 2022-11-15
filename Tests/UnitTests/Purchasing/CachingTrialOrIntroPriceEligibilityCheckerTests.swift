@@ -24,6 +24,7 @@ class CachingTrialOrIntroPriceEligibilityCheckerTests: TestCase {
     private typealias Result = [String: IntroEligibility]
 
     private var mockChecker: MockTrialOrIntroPriceEligibilityChecker!
+    private var notificationCenter: MockNotificationCenter!
     private var caching: CachingTrialOrIntroPriceEligibilityChecker!
 
     override func setUpWithError() throws {
@@ -32,7 +33,8 @@ class CachingTrialOrIntroPriceEligibilityCheckerTests: TestCase {
         try AvailabilityChecks.iOS13APIAvailableOrSkipTest()
 
         self.mockChecker = .init()
-        self.caching = .init(checker: self.mockChecker)
+        self.notificationCenter = .init()
+        self.caching = .init(checker: self.mockChecker, notificationCenter: self.notificationCenter)
     }
 
     func testChecksWithoutCache() async {
@@ -183,6 +185,39 @@ class CachingTrialOrIntroPriceEligibilityCheckerTests: TestCase {
 
         expect(self.mockChecker.invokedCheckTrialOrIntroPriceEligibilityFromOptimalStoreCount) == 2
     }
+
+    func testSubscribesToCustomerInfoChangedNotification() {
+        expect(self.notificationCenter.observersWithBlock).to(containElementSatisfying {
+            $0.notificationName == CustomerInfoManager.customerInfoChangedNotification
+        })
+    }
+
+    func testClearsCacheWhenSubscriptionsChange() async {
+        let expected: Result = [
+            Self.productID1: .init(eligibilityStatus: .eligible)
+        ]
+
+        // 1. Cache result
+
+        self.mockChecker.stubbedCheckTrialOrIntroPriceEligibilityFromOptimalStoreReceiveEligibilityResult = expected
+        _ = await self.caching.checkEligibility(productIdentifiers: [Self.productID1])
+
+        // 2. Clear cache
+
+        self.notificationCenter.fireNotifications()
+
+        // 3. Request again
+
+        let result = await self.caching.checkEligibility(productIdentifiers: [Self.productID1])
+        expect(result) == expected
+
+        expect(self.mockChecker.invokedCheckTrialOrIntroPriceEligibilityFromOptimalStoreCount) == 2
+        expect(self.mockChecker.invokedCheckTrialOrIntroPriceEligibilityFromOptimalStoreParametersList) == [
+            [Self.productID1],
+            [Self.productID1]
+        ]
+    }
+
 }
 
 // MARK: -

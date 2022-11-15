@@ -261,6 +261,8 @@ public typealias StartPurchaseBlock = (@escaping PurchaseCompletedBlock) -> Void
             fatalError(error.localizedDescription)
         }
 
+        let notificationCenter: NotificationCenter = .default
+
         let receiptFetcher = ReceiptFetcher(requestFetcher: fetcher, systemInfo: systemInfo)
         let eTagManager = ETagManager()
         let attributionTypeFactory = AttributionTypeFactory()
@@ -285,7 +287,7 @@ public typealias StartPurchaseBlock = (@escaping PurchaseCompletedBlock) -> Void
                                                       deviceCache: deviceCache,
                                                       backend: backend,
                                                       systemInfo: systemInfo,
-                                                      notificationCenter: .default)
+                                                      notificationCenter: notificationCenter)
         let attributionDataMigrator = AttributionDataMigrator()
         let subscriberAttributesManager = SubscriberAttributesManager(backend: backend,
                                                                       deviceCache: deviceCache,
@@ -371,7 +373,8 @@ public typealias StartPurchaseBlock = (@escaping PurchaseCompletedBlock) -> Void
                                                          backend: backend,
                                                          currentUserProvider: identityManager,
                                                          operationDispatcher: operationDispatcher,
-                                                         productsManager: productsManager)
+                                                         productsManager: productsManager),
+            notificationCenter: notificationCenter
         )
 
         self.init(appUserID: appUserID,
@@ -382,7 +385,7 @@ public typealias StartPurchaseBlock = (@escaping PurchaseCompletedBlock) -> Void
                   backend: backend,
                   paymentQueueWrapper: paymentQueueWrapper,
                   userDefaults: userDefaults,
-                  notificationCenter: .default,
+                  notificationCenter: notificationCenter,
                   systemInfo: systemInfo,
                   offeringsFactory: offeringsFactory,
                   deviceCache: deviceCache,
