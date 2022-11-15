@@ -89,6 +89,8 @@ extension CachingTrialOrIntroPriceEligibilityChecker {
 private extension CachingTrialOrIntroPriceEligibilityChecker {
 
     func clearCache() {
+        Logger.debug(Strings.eligibility.clearing_intro_eligibility_cache)
+
         self.cache.value.removeAll(keepingCapacity: false)
     }
 
