@@ -2044,6 +2044,23 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXLegacyTarget section */
+		5766F58029356BCD00E1B783 /* ReceiptParser */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "build --target ReceiptParser";
+			buildConfigurationList = 5766F58129356BCD00E1B783 /* Build configuration list for PBXLegacyTarget "ReceiptParser" */;
+			buildPhases = (
+			);
+			buildToolPath = swift;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = ReceiptParser;
+			passBuildSettingsInEnvironment = 0;
+			productName = ReceiptParser;
+		};
+/* End PBXLegacyTarget section */
+
 /* Begin PBXNativeTarget section */
 		2DAC5F7126F13C9800C5258F /* StoreKitUnitTests */ = {
 			isa = PBXNativeTarget;
@@ -2207,6 +2224,9 @@
 					2DEAC2D926EFE46E006914ED = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
+					5766F58029356BCD00E1B783 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 				};
 			};
 			buildConfigurationList = 352629F81F7C4B9100C04F2C /* Build configuration list for PBXProject "RevenueCat" */;
@@ -2243,6 +2263,7 @@
 				2DE20B6B264087FB004C597D /* BackendIntegrationTests */,
 				2DEAC2D926EFE46E006914ED /* UnitTestsHostApp */,
 				2DAC5F7126F13C9800C5258F /* StoreKitUnitTests */,
+				5766F58029356BCD00E1B783 /* ReceiptParser */,
 			);
 		};
 /* End PBXProject section */
@@ -3358,6 +3379,40 @@
 			};
 			name = Release;
 		};
+		5766F58229356BCD00E1B783 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8SXR2327BM;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5766F58329356BCD00E1B783 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8SXR2327BM;
+				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3420,6 +3475,15 @@
 			buildConfigurations = (
 				35262A101F7C4B9100C04F2C /* Debug */,
 				35262A111F7C4B9100C04F2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5766F58129356BCD00E1B783 /* Build configuration list for PBXLegacyTarget "ReceiptParser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5766F58229356BCD00E1B783 /* Debug */,
+				5766F58329356BCD00E1B783 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
