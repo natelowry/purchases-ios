@@ -83,14 +83,24 @@ class BasePurchasesTests: TestCase {
                                                                          customerInfoManager: self.customerInfoManager,
                                                                          currentUserProvider: self.identityManager)
         self.mockTransactionsManager = MockTransactionsManager(receiptParser: self.mockReceiptParser)
+
+        // See `addTeardownBlock` docs:
+        // - These run *before* `tearDown`.
+        // - They run in LIFO order.
+
+        self.addTeardownBlock { [weak purchases = self.purchases] in
+            expect(purchases).toEventually(beNil(), timeout: .seconds(1), description: "Purchases has leaked")
+        }
+
+        self.addTeardownBlock {
+            Purchases.clearSingleton()
+
+            self.deviceCache = nil
+            self.purchases = nil
+        }
     }
 
     override func tearDown() {
-        self.deviceCache = nil
-        self.purchases = nil
-
-        Purchases.clearSingleton()
-
         self.userDefaults.removePersistentDomain(forName: Self.userDefaultsSuiteName)
 
         super.tearDown()
