@@ -531,6 +531,17 @@ jobs:
       - scan-and-archive-all-platforms:
           directory: Tests/InstallationTests/SPMInstallation/
 
+  installation-tests-receipt-parser:
+    <<: *base-job
+    steps:
+      - checkout
+      - trust-github-key
+      - update-spm-installation-commit
+      - install-dependencies:
+          directory: Tests/InstallationTests/ReceiptParserInstallation/
+      - scan-and-archive-all-platforms:
+          directory: Tests/InstallationTests/ReceiptParserInstallation/
+
   installation-tests-carthage:
     <<: *base-job
     steps:

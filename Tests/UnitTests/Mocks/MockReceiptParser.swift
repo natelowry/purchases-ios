@@ -35,7 +35,8 @@ class MockReceiptParser: ReceiptParser {
     ]
 
     convenience init() {
-        self.init(containerBuilder: MockASN1ContainerBuilder(),
+        self.init(logger: Logger(),
+                  containerBuilder: MockASN1ContainerBuilder(),
                   receiptBuilder: MockAppleReceiptBuilder())
     }
 

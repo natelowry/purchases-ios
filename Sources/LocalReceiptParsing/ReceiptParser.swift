@@ -14,49 +14,76 @@
 
 import Foundation
 
-class ReceiptParser {
+// TODO: add to APITesters
 
-    static let `default`: ReceiptParser = .init()
+// TODO: document
 
+// TODO: different name for module and type
+
+// TODO: short URL for this?
+/// A type that can parse Apple receipts from a device.
+/// This implements parsing based on Apple's documentation: https://developer.apple.com/library/archive/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
+public class ReceiptParser: NSObject {
+
+    private let logger: LoggerType
     private let containerBuilder: ASN1ContainerBuilder
     private let receiptBuilder: AppleReceiptBuilder
 
-    init(containerBuilder: ASN1ContainerBuilder = ASN1ContainerBuilder(),
-         receiptBuilder: AppleReceiptBuilder = AppleReceiptBuilder()) {
+    // TODO: extract to a separate file for ReceiptParser only and add to APITester
+
+//    convenience override init() {
+//        self.init(logger: ReceiptParserLogger())
+//    }
+
+    internal init(logger: LoggerType,
+                  containerBuilder: ASN1ContainerBuilder = ASN1ContainerBuilder(),
+                  receiptBuilder: AppleReceiptBuilder = AppleReceiptBuilder()) {
+        self.logger = logger
         self.containerBuilder = containerBuilder
         self.receiptBuilder = receiptBuilder
     }
 
-    func receiptHasTransactions(receiptData: Data) -> Bool {
-        Logger.info(Strings.receipt.parsing_receipt)
-        if let receipt = try? parse(from: receiptData) {
-            return receipt.inAppPurchases.count > 0
-        }
+    /// Returns the result of parsing the receipt from `receiptData`, or throws `ReceiptParser.Error`.
+    public func parse(from receiptData: Data) throws -> AppleReceipt {
+        self.logger.info(ReceiptStrings.parsing_receipt)
 
-        Logger.warn(Strings.receipt.parsing_receipt_failed(fileName: #fileID, functionName: #function))
-        return true
-    }
-
-    func parse(from receiptData: Data) throws -> AppleReceipt {
         let intData = [UInt8](receiptData)
 
         let asn1Container = try self.containerBuilder.build(fromPayload: ArraySlice(intData))
         guard let receiptASN1Container = try self.findASN1Container(withObjectId: ASN1ObjectIdentifier.data,
                                                                     inContainer: asn1Container) else {
-            Logger.error(Strings.receipt.data_object_identifer_not_found_receipt)
+            self.logger.error(ReceiptStrings.data_object_identifer_not_found_receipt)
             throw Error.dataObjectIdentifierMissing
         }
-        let receipt = try receiptBuilder.build(fromContainer: receiptASN1Container)
-        Logger.info(Strings.receipt.parsing_receipt_success)
+
+        let receipt = try self.receiptBuilder.build(fromContainer: receiptASN1Container)
+        self.logger.info(ReceiptStrings.parsing_receipt_success)
         return receipt
     }
+
 }
 
 // @unchecked because:
 // - Class is not `final` (it's mocked). This implicitly makes subclasses `Sendable` even if they're not thread-safe.
 extension ReceiptParser: @unchecked Sendable {}
 
-// MARK: -
+// MARK: - Internal
+
+extension ReceiptParser {
+
+    @objc
+    func receiptHasTransactions(receiptData: Data) -> Bool {
+        if let receipt = try? self.parse(from: receiptData) {
+            return !receipt.inAppPurchases.isEmpty
+        }
+
+        self.logger.warn(ReceiptStrings.parsing_receipt_failed(fileName: #fileID, functionName: #function))
+        return true
+    }
+
+}
+
+// MARK: - Private
 
 private extension ReceiptParser {
 

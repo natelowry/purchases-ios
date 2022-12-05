@@ -14,42 +14,25 @@
 
 import Foundation
 
-// swiftlint:disable nesting
+// TODO: document
 
 /// The contents of a parsed IAP receipt.
-struct AppleReceipt: Equatable {
+public struct AppleReceipt: Equatable {
 
-    // swiftlint:disable:next line_length
-    // https://developer.apple.com/library/archive/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
-    struct Attribute {
+    public let bundleId: String
+    public let applicationVersion: String
+    public let originalApplicationVersion: String?
+    public let opaqueValue: Data
+    public let sha1Hash: Data
+    public let creationDate: Date
+    public let expirationDate: Date?
+    public let inAppPurchases: [InAppPurchase]
 
-        enum AttributeType: Int {
+}
 
-            case bundleId = 2,
-                 applicationVersion = 3,
-                 opaqueValue = 4,
-                 sha1Hash = 5,
-                 creationDate = 12,
-                 inAppPurchase = 17,
-                 originalApplicationVersion = 19,
-                 expirationDate = 21
+// MARK: - Extensions
 
-        }
-
-        let type: AttributeType
-        let version: Int
-        let value: String
-
-    }
-
-    let bundleId: String
-    let applicationVersion: String
-    let originalApplicationVersion: String?
-    let opaqueValue: Data
-    let sha1Hash: Data
-    let creationDate: Date
-    let expirationDate: Date?
-    let inAppPurchases: [InAppPurchase]
+extension AppleReceipt {
 
     func purchasedIntroOfferOrFreeTrialProductIdentifiers() -> Set<String> {
         let productIdentifiers = self.inAppPurchases
@@ -57,12 +40,6 @@ struct AppleReceipt: Equatable {
             .map { $0.productId }
         return Set(productIdentifiers)
     }
-
-}
-
-// MARK: - Extensions
-
-extension AppleReceipt {
 
     func containsActivePurchase(forProductIdentifier identifier: String) -> Bool {
         return (
@@ -79,7 +56,8 @@ extension AppleReceipt: Codable {}
 
 extension AppleReceipt: CustomDebugStringConvertible {
 
-    var debugDescription: String {
+    /// swiftlint:disable:next missing_docs
+    public var debugDescription: String {
         return (try? self.prettyPrintedJSON) ?? "<null>"
     }
 

@@ -20,6 +20,7 @@ class DateFormatterExtensionTests: TestCase {
         expect(ArraySlice(dateBytes).toDate()) == date
     }
 
+    // TODO: use common formatter
     func testDateWithMillisecondsFromBytesReturnsCorrectValueIfPossible() throws {
         let timeZone = TimeZone(identifier: "UTC")
         let dateComponents = DateComponents(timeZone: timeZone,

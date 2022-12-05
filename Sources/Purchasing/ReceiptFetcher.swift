@@ -100,6 +100,14 @@ extension ReceiptFetcher {
 // - Class is not `final` (it's mocked). This implicitly makes subclasses `Sendable` even if they're not thread-safe.
 extension ReceiptFetcher: @unchecked Sendable {}
 
+extension ReceiptParser {
+
+    /// A default instance of `ReceiptParser`
+    @objc
+    public static let `default`: ReceiptParser = .init(logger: Logger())
+
+}
+
 // MARK: -
 
 private extension ReceiptFetcher {
@@ -173,7 +181,7 @@ private extension ReceiptFetcher {
                 }
             }
 
-            Logger.debug(Strings.receipt.retrying_receipt_fetch_after(sleepDuration: sleepDuration))
+            Logger.debug(Strings.receipt.retrying_receipt_fetch_after(sleepDuration: sleepDuration.seconds))
             try? await Task.sleep(nanoseconds: UInt64(sleepDuration.nanoseconds))
         } while retries <= maximumRetries && !Task.isCancelled
 

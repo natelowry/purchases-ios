@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "57D92C32293E4D0C00D1912A"
-               BuildableName = "ReceiptParser.framework"
-               BlueprintName = "ReceiptParser"
-               ReferencedContainer = "container:RevenueCat.xcodeproj">
+               BlueprintIdentifier = "2DD778CF270E233F0079CBD4"
+               BuildableName = "ReceiptParserAPITester.app"
+               BlueprintName = "ReceiptParserAPITester"
+               ReferencedContainer = "container:ReceiptParserAPITester.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -50,10 +50,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "57D92C32293E4D0C00D1912A"
-            BuildableName = "ReceiptParser.framework"
-            BlueprintName = "ReceiptParser"
-            ReferencedContainer = "container:RevenueCat.xcodeproj">
+            BlueprintIdentifier = "2DD778CF270E233F0079CBD4"
+            BuildableName = "ReceiptParserAPITester.app"
+            BlueprintName = "ReceiptParserAPITester"
+            ReferencedContainer = "container:ReceiptParserAPITester.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -119,3 +119,32 @@ class AppleReceiptBuilder {
 // @unchecked because:
 // - Class is not `final` (it's mocked). This implicitly makes subclasses `Sendable` even if they're not thread-safe.
 extension AppleReceiptBuilder: @unchecked Sendable {}
+
+// swiftlint:disable nesting
+
+extension AppleReceipt {
+
+    // swiftlint:disable:next line_length
+    // https://developer.apple.com/library/archive/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
+    struct Attribute {
+
+        enum AttributeType: Int {
+
+            case bundleId = 2,
+                 applicationVersion = 3,
+                 opaqueValue = 4,
+                 sha1Hash = 5,
+                 creationDate = 12,
+                 inAppPurchase = 17,
+                 originalApplicationVersion = 19,
+                 expirationDate = 21
+
+        }
+
+        let type: AttributeType
+        let version: Int
+        let value: String
+
+    }
+
+}
